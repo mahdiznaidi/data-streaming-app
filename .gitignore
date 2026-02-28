@@ -1,4 +1,7 @@
 __pycache__/
 *.pyc
-
-data/
+data/*
+!data/spark_out/
+!data/spark_out/**
+data/checkpoints/
+data/**/.crc
