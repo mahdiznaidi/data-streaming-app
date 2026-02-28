@@ -37,13 +37,13 @@ All data is real — every message is an actual trade happening on Binance at th
                            │
                            ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                    producer.py                       │
+│                    producer.py                                      │
 │                                                                     │
 │  Step 1+2 │ Field validation & type conversion                      │
-│  Step 3   │ Deduplication (rolling cache of 2000 trade IDs)        │
-│  Step 4   │ Price spike detection (flag if jump > 2%)              │
-│  Step 5   │ Enrichment (trade_value_usdt, ISO timestamp, trade_id) │
-│  Step 6   │ Live stats tracking (avg/min/max price, volume)        │
+│  Step 3   │ Deduplication (rolling cache of 2000 trade IDs)         │
+│  Step 4   │ Price spike detection (flag if jump > 2%)               │
+│  Step 5   │ Enrichment (trade_value_usdt, ISO timestamp, trade_id)  │
+│  Step 6   │ Live stats tracking (avg/min/max price, volume)         │
 └──────┬────────────────────────────┬───────────────────────────────-─┘
        │                            │
        ▼                            ▼
@@ -54,32 +54,32 @@ All data is real — every message is an actual trade happening on Binance at th
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                   spark/app.py                       │
+│                   spark/app.py                                      │
 │                                                                     │
 │  • Schema parsing & type casting                                    │
-│  • Watermark (2 min) + deduplication by trade_id                   │
-│  • Tumbling window (1 min): trade_count, avg_price,                │
+│  • Watermark (2 min) + deduplication by trade_id                    │
+│  • Tumbling window (1 min): trade_count, avg_price,                 │
 │    sum_qty, sum_value, spike_count                                  │
-│  • Sliding window (5 min / 1 min slide): trade_count,              │
-│    avg_price, min_price, max_price, sum_value                      │
+│  • Sliding window (5 min / 1 min slide): trade_count,               │
+│    avg_price, min_price, max_price, sum_value                       │
 └──────┬────────────────────────────┬───────────────────────────────-─┘
        │                            │
        ▼                            ▼
 ┌──────────────────┐     ┌──────────────────────┐
-│ tumbling_1m/     │     │ sliding_5m_1m/        │  ← Parquet Files
-│ (parquet)        │     │ (parquet)             │
-└────────┬─────────┘     └──────────┬────────────┘
+│ tumbling_1m/     │     │ sliding_5m_1m/       │  ← Parquet Files
+│ (parquet)        │     │ (parquet)            │
+└────────┬─────────┘     └──────────┬───────────┘
          │                          │
          └──────────┬───────────────┘
                     │
                     ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│               dashboard.py + ml_model.py           │
+│               dashboard.py + ml_model.py                            │
 │                                                                     │
-│  • Isolation Forest — anomaly detection on streaming windows       │
-│  • Linear Regression — next window price prediction                │
-│  • Streamlit dashboard — 4 tabs, live KPIs, auto-refresh           │
-│  • Charts: price, volume, spikes, sliding range, anomalies         │
+│  • Isolation Forest — anomaly detection on streaming windows        │
+│  • Linear Regression — next window price prediction                 │
+│  • Streamlit dashboard — 4 tabs, live KPIs, auto-refresh            │
+│  • Charts: price, volume, spikes, sliding range, anomalies          │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -90,20 +90,20 @@ All data is real — every message is an actual trade happening on Binance at th
 ```
 data-streaming-app/
 │
-├── producer.py              # Binance WebSocket → Kafka (Molka)
+├── producer.py              # Binance WebSocket → Kafka 
 ├── consumer.py              # Verification consumer
 ├── setup_topics.py          # Kafka topic creation utility
 ├── docker-compose.yml       # Kafka + Zookeeper + Kafka UI
 ├── requirements.txt         # Python dependencies (ingestion)
 │
-├── spark/                   # Spark Structured Streaming (Mehdi)
+├── spark/                   # Spark Structured Streaming 
 │   ├── app.py               # Streaming entrypoint
 │   ├── config.py            # Environment-based configuration
 │   ├── processing.py        # Cleaning + windowed aggregations
 │   ├── schemas.py           # Kafka message schema
 │   └── requirements.txt     # Spark dependencies
 │
-├── dashboard.py             # Streamlit dashboard (Nour)
+├── dashboard.py             # Streamlit dashboard 
 ├── ml_model.py              # Isolation Forest + Linear Regression
 ├── data_loader.py           # Parquet reader with caching
 ├── requirements_dashboard.txt
