@@ -5,3 +5,7 @@ data/*
 !data/spark_out/**
 data/checkpoints/
 data/**/.crc
+# Ignore generated parquet data
+data/spark_out/
+data/checkpoints/
+*.parquet
