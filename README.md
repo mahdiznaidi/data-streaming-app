@@ -76,6 +76,27 @@ spark.readStream.format("kafka") \
     - `./data/checkpoints/tumbling_1m/`
     - `./data/checkpoints/sliding_5m_1m/`
 
+### Data handoff for Nour (Dashboard/ML)
+
+When Spark runs with `SINK=parquet`, the data to consume is:
+
+- `./data/spark_out/tumbling_1m/`
+- `./data/spark_out/sliding_5m_1m/`
+
+Inside each folder, use the parquet files (`*.parquet`) as dataset source.
+Checkpoint folders are internal Spark state and should not be consumed by dashboard/ML code.
+
+Quick read example (PySpark):
+
+```python
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.getOrCreate()
+tumbling = spark.read.parquet("data/spark_out/tumbling_1m")
+sliding = spark.read.parquet("data/spark_out/sliding_5m_1m")
+```
+
+More details are in [`README_NOUR.md`](README_NOUR.md).
+
 ## Run
 
 1. Install Python deps:
