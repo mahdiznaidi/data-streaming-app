@@ -7,11 +7,9 @@
 
 ## 👥 Team
 
-| Member | Role | Responsibility |
-|--------|------|----------------|
-| **Molka ESSID** | Data Engineer | Kafka ingestion, Binance WebSocket producer, data treatment pipeline |
-| **Mehdi ZNAIDI** | Stream Processor | Spark Structured Streaming, windowed aggregations, parquet sink |
-| **Nour SAHLI** | ML Engineer / Frontend | Machine Learning models, Streamlit dashboard, live visualization |
+**Molka ESSID**
+**Mehdi ZNAIDI** 
+**Nour SAHLI** 
 
 ---
 
